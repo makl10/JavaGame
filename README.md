@@ -1,0 +1,1 @@
+Simple Java game still very much in its early stages, starting to design the engine and the necessary backend code for the game. Working with two other people on this right now, coming along nicely if slowly due to school constantly putting a damper on our plans.
