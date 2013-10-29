@@ -6,16 +6,19 @@ package userInterface;
 * CardLayoutDemo.java
 *
 */
+import game.GameWindow;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -23,41 +26,76 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import character.Character;
 
-public class CardLayoutDemo implements ItemListener, ActionListener {
+public class CardLayoutDemo extends JFrame implements ActionListener {
    JPanel cards; //a panel that uses CardLayout
-   final static String MASTERSAVE = "Master Save!";
+   final static String MASTERSAVE = "Start Game";
    final static String BASICINFO = "Basic Character Info";
    final static String ATTRIBUTES = "Attributes";
    final static String SKILLS = "Skill Selection";
    final static String INVENTORY = "Basic Inventory Selection";
    final static String CLASS = "Class Selection";
+   final static String NEXTBUTTONSTRING = "Next";
    
    Character main;
    
    //Master save stuff
    JButton masterSaveButton;
+   JButton masterNextButton;
+   
+   JButton basicNextButton;
+   JButton attributeNextButton;
    
    BasicInfoPanel cardBasic;
    AttributePanel cardAttribute;
+   
+   ArrayList<String> cardNames = new ArrayList<String>();
+   
+   int i = 1;
     
-   public void addComponentToPane(Container pane) {
-       //Put the JComboBox in a JPanel to get a nicer look.
-       JPanel comboBoxPane = new JPanel(); //use FlowLayout
-       String comboBoxItems[] = { MASTERSAVE, BASICINFO, ATTRIBUTES, CLASS, SKILLS, INVENTORY };
-       JComboBox cb = new JComboBox(comboBoxItems);
-       cb.setEditable(false);
-       cb.addItemListener(this);
-       comboBoxPane.add(cb);
+   public void addComponentToPane(Container pane){
+       cardNames.add(MASTERSAVE);
+       cardNames.add(BASICINFO);
+       cardNames.add(ATTRIBUTES);
+       cardNames.add(SKILLS);
+       cardNames.add(INVENTORY);
+       cardNames.add(CLASS);
+	   
+       //Initialise all the next buttons
+       masterNextButton = new JButton(NEXTBUTTONSTRING);
+       masterNextButton.addActionListener(this);
        
+       basicNextButton = new JButton(NEXTBUTTONSTRING);
+       basicNextButton.addActionListener(this);
+       
+       attributeNextButton = new JButton(NEXTBUTTONSTRING);
+       attributeNextButton.addActionListener(this);
+       
+       //Make the master panel
        JPanel cardMaster = new JPanel();
        masterSaveButton = new JButton(MASTERSAVE);
        masterSaveButton.addActionListener(this);
        cardMaster.add(masterSaveButton);
+       cardMaster.add(masterNextButton);
         
+       
+       
        //Create the name panel add all of the components
-       cardBasic = new BasicInfoPanel();       
-        
-       cardAttribute = new AttributePanel();
+       try {
+		cardBasic = new BasicInfoPanel();
+		cardBasic.addNextButton(basicNextButton);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+       
+       //The Attribute Panel
+       try {
+		cardAttribute = new AttributePanel();
+		cardAttribute.addNextButton(attributeNextButton);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
         
        //Create the panel that contains the "cards".
        cards = new JPanel(new CardLayout());
@@ -66,20 +104,39 @@ public class CardLayoutDemo implements ItemListener, ActionListener {
        cards.add(cardAttribute, ATTRIBUTES);
 
         
-       pane.add(cb, BorderLayout.PAGE_START);
        pane.add(cards, BorderLayout.CENTER);
    }
     
-   public void itemStateChanged(ItemEvent evt) {
-       CardLayout cl = (CardLayout)(cards.getLayout());
-       cl.show(cards, (String)evt.getItem());
-   }
    
    public void actionPerformed(ActionEvent event)
    {
 	   if(event.getSource() == masterSaveButton){
 		   main = new Character(cardBasic.getName(), cardAttribute.getAttributeSet(), cardBasic.getRace());
 		   System.out.println(main.toString());
+       		setVisible(false);
+    	
+       		Thread workerThread = new Thread(new Worker(main));
+       		workerThread.start();
+       	
+       		setVisible(false);
+	   }
+	   
+	   else if(event.getSource() == masterNextButton){
+		   CardLayout cl = (CardLayout)(cards.getLayout());
+		   cl.show(cards, cardNames.get(i));
+		   i++;
+	   }
+	   
+	   else if(event.getSource() == basicNextButton) {
+		   CardLayout cl = (CardLayout)(cards.getLayout());
+		   cl.show(cards, cardNames.get(i));
+		   i++;
+	   }
+	   
+	   else if(event.getSource() == attributeNextButton) {
+		   CardLayout cl = (CardLayout)(cards.getLayout());
+		   cl.show(cards, cardNames.get(i));
+		   i++;
 	   }
    }
     
@@ -88,17 +145,20 @@ public class CardLayoutDemo implements ItemListener, ActionListener {
     * this method should be invoked from the
     * event dispatch thread.
     */
-   private static void createAndShowGUI() {
+   private static void createAndShowGUI(){
        //Create and set up the window.
        JFrame frame = new JFrame("CharacterCreator");
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
        //Create and set up the content pane.
        CardLayoutDemo demo = new CardLayoutDemo();
+       demo.setBackground(Color.black);
        demo.addComponentToPane(frame.getContentPane());
+
         
        //Display the window.
 //       frame.pack();
+       
        frame.setSize(800, 600);
        frame.setVisible(true);
    }
@@ -128,4 +188,16 @@ public class CardLayoutDemo implements ItemListener, ActionListener {
            }
        });
    }
+}
+
+class Worker implements Runnable {
+
+	Character main;
+	public Worker(Character mn){
+		main = mn;
+	}
+	public void run() {
+		GameWindow gameWindow = new GameWindow(main);		
+		gameWindow.start();				
+	}
 }

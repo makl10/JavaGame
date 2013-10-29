@@ -2,11 +2,16 @@ package userInterface;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,7 +36,9 @@ public class AttributePanel extends JPanel implements ActionListener
 	public static final String INTELLIGENCELABELSTRING = "Intelligence: ";
 	public static final String CONSTITUTIONLABELSTRING = "Constitution: ";
 	
-	int pointsRemaining = 20;
+	int pointsRemaining = 30;
+	
+	private Image backgroundImage;
 	
 	//The attributeSet to return
 	AttributeSet attributes;
@@ -68,8 +75,10 @@ public class AttributePanel extends JPanel implements ActionListener
 	
 	
 	
-	public AttributePanel()
+	public AttributePanel() throws IOException
 	{
+		backgroundImage = ImageIO.read(new File("data/npvPRaN.jpg"));
+		
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
 		this.setLayout(gridBag);
@@ -79,7 +88,7 @@ public class AttributePanel extends JPanel implements ActionListener
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		AttributeLabel.setFont(new Font("Times", Font.BOLD, 18));
+		AttributeLabel.setFont(new Font("Times", Font.BOLD, 24));
 		AttributeLabel.setBackground(Color.red);
 		AttributeLabel.setOpaque(true);
 		add(AttributeLabel, c);
@@ -88,8 +97,8 @@ public class AttributePanel extends JPanel implements ActionListener
 		PointsRemainingLabel = new JLabel(POINTSREMAININGSTRING + pointsRemaining);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
-		c.gridy = 2;
-		PointsRemainingLabel.setFont(new Font("Times", Font.PLAIN, 16));
+		c.gridy = 1;
+		PointsRemainingLabel.setFont(new Font("Times", Font.PLAIN, 20));
 		//PointsRemainingLabel.setBackground(Color.gray);
 		PointsRemainingLabel.setOpaque(true);
 		add(PointsRemainingLabel, c);
@@ -97,8 +106,8 @@ public class AttributePanel extends JPanel implements ActionListener
 		//Set Attribute Category Label
 		AttributeCategoryLabel = new JLabel(ATTRIBUTECATEGORYSTRING);
 		c.gridx = 0;
-		c.gridy = 4;
-		AttributeCategoryLabel.setFont(new Font("Times", Font.PLAIN, 16));
+		c.gridy = 2;
+		AttributeCategoryLabel.setFont(new Font("Times", Font.PLAIN, 20));
 		AttributeCategoryLabel.setBackground(Color.white);
 		AttributeCategoryLabel.setOpaque(true);
 		add(AttributeCategoryLabel, c);
@@ -106,8 +115,8 @@ public class AttributePanel extends JPanel implements ActionListener
 		//Set the Strength Label
 		StrengthLabel = new JLabel(STRENGTHLABELSTRING + strength);
 		c.gridx = 0;
-		c.gridy = 6;
-		StrengthLabel.setFont(new Font("Times", Font.PLAIN, 16));
+		c.gridy = 3;
+		StrengthLabel.setFont(new Font("Times", Font.PLAIN, 20));
 		StrengthLabel.setBackground(Color.white);
 		StrengthLabel.setOpaque(true);
 		add(StrengthLabel, c);
@@ -116,7 +125,7 @@ public class AttributePanel extends JPanel implements ActionListener
 		strengthIncrementButton = new JButton(ADDBUTTONLABEL);
 		strengthIncrementButton.addActionListener(this);
 		c.gridx = 1;
-		c.gridy = 6;
+		c.gridy = 3;
 		strengthIncrementButton.setFont(new Font("Times", Font.PLAIN, 16));
 		strengthIncrementButton.setBackground(Color.gray);
 		strengthIncrementButton.setOpaque(true);
@@ -125,8 +134,8 @@ public class AttributePanel extends JPanel implements ActionListener
 		//Set the Dexterity Label
 		DexterityLabel = new JLabel(DEXTERITYLABELSTRING + dexterity);
 		c.gridx = 0;
-		c.gridy = 8;
-		DexterityLabel.setFont(new Font("Times", Font.PLAIN, 16));
+		c.gridy = 4;
+		DexterityLabel.setFont(new Font("Times", Font.PLAIN, 20));
 		DexterityLabel.setBackground(Color.white);
 		DexterityLabel.setOpaque(true);
 		add(DexterityLabel, c);
@@ -135,7 +144,7 @@ public class AttributePanel extends JPanel implements ActionListener
 		dexterityIncrementButton = new JButton(ADDBUTTONLABEL);
 		dexterityIncrementButton.addActionListener(this);
 		c.gridx = 1;
-		c.gridy = 8;
+		c.gridy = 4;
 		dexterityIncrementButton.setFont(new Font("Times", Font.PLAIN, 16));
 		dexterityIncrementButton.setBackground(Color.gray);
 		dexterityIncrementButton.setOpaque(true);
@@ -144,8 +153,8 @@ public class AttributePanel extends JPanel implements ActionListener
 		//Set the Intelligence Label
 		IntelligenceLabel = new JLabel(INTELLIGENCELABELSTRING + intelligence);
 		c.gridx = 0;
-		c.gridy = 10;
-		IntelligenceLabel.setFont(new Font("Times", Font.PLAIN, 16));
+		c.gridy = 5;
+		IntelligenceLabel.setFont(new Font("Times", Font.PLAIN, 20));
 		IntelligenceLabel.setBackground(Color.white);
 		IntelligenceLabel.setOpaque(true);
 		add(IntelligenceLabel, c);
@@ -154,7 +163,7 @@ public class AttributePanel extends JPanel implements ActionListener
 		intelligenceIncrementButton = new JButton(ADDBUTTONLABEL);
 		intelligenceIncrementButton.addActionListener(this);
 		c.gridx = 1;
-		c.gridy = 10;
+		c.gridy = 5;
 		intelligenceIncrementButton.setFont(new Font("Times", Font.PLAIN, 16));
 		intelligenceIncrementButton.setBackground(Color.gray);
 		intelligenceIncrementButton.setOpaque(true);
@@ -163,8 +172,8 @@ public class AttributePanel extends JPanel implements ActionListener
 		//Set the Constitution Label
 		ConstitutionLabel = new JLabel(CONSTITUTIONLABELSTRING + constitution);
 		c.gridx = 0;
-		c.gridy = 12;
-		ConstitutionLabel.setFont(new Font("Times", Font.PLAIN, 16));
+		c.gridy = 6;
+		ConstitutionLabel.setFont(new Font("Times", Font.PLAIN, 20));
 		ConstitutionLabel.setBackground(Color.white);
 		ConstitutionLabel.setOpaque(true);
 		add(ConstitutionLabel, c);
@@ -173,7 +182,7 @@ public class AttributePanel extends JPanel implements ActionListener
 		constitutionIncrementButton = new JButton(ADDBUTTONLABEL);
 		constitutionIncrementButton.addActionListener(this);
 		c.gridx = 1;
-		c.gridy = 12;
+		c.gridy = 6;
 		constitutionIncrementButton.setFont(new Font("Times", Font.PLAIN, 16));
 		constitutionIncrementButton.setBackground(Color.gray);
 		constitutionIncrementButton.setOpaque(true);
@@ -182,20 +191,38 @@ public class AttributePanel extends JPanel implements ActionListener
 		//Set the Health Label
 		HealthLabel = new JLabel(HEALTHLABELSTRING + (health + constitution*10));
 		c.gridx = 0;
-		c.gridy = 14;
-		HealthLabel.setFont(new Font("Times", Font.PLAIN, 16));
+		c.gridy = 7;
+		HealthLabel.setFont(new Font("Times", Font.PLAIN, 20));
 		HealthLabel.setBackground(Color.white);
 		HealthLabel.setOpaque(true);
 		add(HealthLabel, c);
 		
 		//Set the Mana Label
-		ManaLabel = new JLabel(MANALABELSTRING + (health + constitution*10));
+		ManaLabel = new JLabel(MANALABELSTRING + (mana + intelligence*10));
 		c.gridx = 0;
-		c.gridy = 16;
-		HealthLabel.setFont(new Font("Times", Font.PLAIN, 16));
-		HealthLabel.setBackground(Color.white);
-		HealthLabel.setOpaque(true);
-		add(HealthLabel, c);
+		c.gridy = 8;
+		ManaLabel.setFont(new Font("Times", Font.PLAIN, 20));
+		ManaLabel.setBackground(Color.white);
+		ManaLabel.setOpaque(true);
+		add(ManaLabel, c);
+		
+		//Set the Damage Label
+		DamageLabel = new JLabel(DAMAGELABELSTRING + (damage + strength));
+		c.gridx = 0;
+		c.gridy = 9;
+		DamageLabel.setFont(new Font("Times", Font.PLAIN, 20));
+		DamageLabel.setBackground(Color.white);
+		DamageLabel.setOpaque(true);
+		add(DamageLabel, c);
+		
+		//Set the Armour Label
+		ArmourLabel = new JLabel(ARMOURLABELSTRING + (armour + dexterity));
+		c.gridx = 0;
+		c.gridy = 10;
+		ArmourLabel.setFont(new Font("Times", Font.PLAIN, 20));
+		ArmourLabel.setBackground(Color.white);
+		ArmourLabel.setOpaque(true);
+		add(ArmourLabel, c);
 	}
 	
 	//All the appropriate button responses
@@ -206,6 +233,7 @@ public class AttributePanel extends JPanel implements ActionListener
 			pointsRemaining--;
 			PointsRemainingLabel.setText(POINTSREMAININGSTRING + pointsRemaining);
 			StrengthLabel.setText(STRENGTHLABELSTRING + strength);
+			DamageLabel.setText(DAMAGELABELSTRING + (damage + strength));
 		}
 		
 		else if(event.getSource() == dexterityIncrementButton && pointsRemaining > 0){
@@ -213,6 +241,7 @@ public class AttributePanel extends JPanel implements ActionListener
 			pointsRemaining--;
 			PointsRemainingLabel.setText(POINTSREMAININGSTRING + pointsRemaining);
 			DexterityLabel.setText(DEXTERITYLABELSTRING + dexterity);
+			ArmourLabel.setText(ARMOURLABELSTRING + (armour + dexterity));
 		}
 		
 		else if(event.getSource() == intelligenceIncrementButton && pointsRemaining > 0){
@@ -220,6 +249,7 @@ public class AttributePanel extends JPanel implements ActionListener
 			pointsRemaining--;
 			PointsRemainingLabel.setText(POINTSREMAININGSTRING + pointsRemaining);
 			IntelligenceLabel.setText(INTELLIGENCELABELSTRING + intelligence);
+			ManaLabel.setText(MANALABELSTRING + (mana + intelligence*10));
 		}
 		
 		else if(event.getSource() == constitutionIncrementButton && pointsRemaining > 0){
@@ -227,7 +257,7 @@ public class AttributePanel extends JPanel implements ActionListener
 			pointsRemaining--;
 			PointsRemainingLabel.setText(POINTSREMAININGSTRING + pointsRemaining);
 			ConstitutionLabel.setText(CONSTITUTIONLABELSTRING + constitution);
-			HealthLabel.setText((HEALTHLABELSTRING + (health + constitution*10)));
+			HealthLabel.setText(HEALTHLABELSTRING + (health + constitution*10));
 		}
 	}
 	
@@ -236,4 +266,21 @@ public class AttributePanel extends JPanel implements ActionListener
 		attributes = new AttributeSet(health, mana, damage, armour, strength, dexterity, intelligence, constitution);
 		return attributes;
 	}
+	
+	public void addNextButton(JButton nextButton)
+	{
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 11;
+		this.add(nextButton, c);
+	}
+	
+	@Override
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		g.drawImage(backgroundImage, 0, 0, this);
+	}
+	
 }

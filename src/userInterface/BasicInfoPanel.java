@@ -1,14 +1,19 @@
 package userInterface;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Enumeration;
+import java.io.File;
+import java.io.IOException;
 
-import javax.swing.AbstractButton;
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,35 +21,30 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import character.AttributeSet;
-import character.Character;
 import character.Race;
 
 public class BasicInfoPanel extends JPanel implements ActionListener
 {
-	   final static String BASICINFO = "Basic Character Info";
-	   final static String ATTRIBUTES = "Attributes";
-	   final static String SKILLS = "Skill Selection";
-	   final static String INVENTORY = "Basic Inventory Selection";
-	   final static String ClASS = "Class Selection";
+
 	   final static String NAMEBUTTONSTRING = "Enter!";
-	   final static String FINISHBUTTONSTRING = "SAVE!";
 	   final static String HUMANNAMESTRING = "Human";
 	   final static String ELFNAMESTRING = "Elf";
 	   final static String DWARFNAMESTRING = "Dwarf";
-
+	   final static String NAMEDISPLAYLABELSTRING = "Name";
+	   final static String RACEDISPLAYLABELSTRING = "Race";
 	   
 	   private String aName;
 	   private Race aRace;
-	   Character aCharacter;
 	   
-	   Character main;
+	   private Image backgroundImage;
+
 	   
 	   //Character Name Panel Set Up
 	   JButton nameButtonEnter;
-	   JButton saveButton;
 	   JTextField nameTextField;
 	   JLabel nameLabel;
+	   JLabel nameDisplayLabel;
+	   JLabel raceDisplayLabel;
 	   
 	   //Race RadioButtons
 	   JRadioButton humanButton;
@@ -55,16 +55,23 @@ public class BasicInfoPanel extends JPanel implements ActionListener
 	   boolean isElf = false;
 	   boolean isDwarf = false;
 	   
-	   public BasicInfoPanel()
+	   public BasicInfoPanel() throws IOException
 	   {
-		   this.setLayout(new FlowLayout());
-		   this.setPreferredSize(new Dimension(240, 300));
-
-		   //Name Panel Set up
-	       nameButtonEnter = new JButton(NAMEBUTTONSTRING);
-	       nameButtonEnter.addActionListener(this);
-	       saveButton = new JButton(FINISHBUTTONSTRING);
-	       saveButton.addActionListener(this);
+		   backgroundImage = ImageIO.read(new File("data/npvPRaN.jpg"));
+		   
+			GridBagLayout gridBag = new GridBagLayout();
+			GridBagConstraints c = new GridBagConstraints();
+			this.setLayout(gridBag);
+	       
+	       //Name Label
+	       nameLabel = new JLabel("Select your Personal Details");
+	       c.fill = GridBagConstraints.HORIZONTAL;
+	       c.gridx = 0;
+	       c.gridy = 0;
+	       nameLabel.setFont(new Font("Times", Font.BOLD, 18));
+	       nameLabel.setBackground(Color.gray);
+	       nameLabel.setOpaque(true);
+	       add(nameLabel, c);
 	       
 	       //Name text field
 	       nameTextField = new JTextField("Enter your name here!", 20);
@@ -74,18 +81,37 @@ public class BasicInfoPanel extends JPanel implements ActionListener
 	    		   nameTextField.setText("");
 	    	   }
 	       });
+	       c.fill = GridBagConstraints.HORIZONTAL;
+	       c.gridx = 0;
+	       c.gridy = 1;
+	       nameTextField.setFont(new Font("Times", Font.PLAIN, 14));
+	       nameTextField.setBackground(Color.white);
+	       nameTextField.setOpaque(true);
+	       add(nameTextField, c);
 	       
-	       //Name Label
-	       nameLabel = new JLabel("Select your Personal Details");
-	       
-	       //Radio Buttons
+	       //Radio Button for human
 	       humanButton = new JRadioButton(HUMANNAMESTRING);
-	       elfButton = new JRadioButton(ELFNAMESTRING);
-	       dwarfButton = new JRadioButton(DWARFNAMESTRING);
-	       
 	       humanButton.addActionListener(this);
+	       c.fill = GridBagConstraints.HORIZONTAL;
+	       c.gridx = 0;
+	       c.gridy = 2;
+	       add(humanButton, c);
+	       
+	       //Radio Button for Elf
+	       elfButton = new JRadioButton(ELFNAMESTRING);
 	       elfButton.addActionListener(this);
+	       c.fill = GridBagConstraints.HORIZONTAL;
+	       c.gridx = 0;
+	       c.gridy = 4;
+	       add(elfButton, c);
+	       
+	       //Radio Button for dwarf
+	       dwarfButton = new JRadioButton(DWARFNAMESTRING);
 	       dwarfButton.addActionListener(this);
+	       c.fill = GridBagConstraints.HORIZONTAL;
+	       c.gridx = 0;
+	       c.gridy = 6;
+	       add(dwarfButton, c);
 	       
 	       //Button group to hold the radio buttons
 	       ButtonGroup group = new ButtonGroup();
@@ -93,15 +119,40 @@ public class BasicInfoPanel extends JPanel implements ActionListener
 	       group.add(elfButton);
 	       group.add(dwarfButton);
 	       
-	       add(nameLabel);
-	       add(nameTextField);
-	       for(Enumeration<AbstractButton> en = group.getElements(); en.hasMoreElements();) {
-	    	   AbstractButton b = en.nextElement();
-	    	   add(b);
-	       }
+		   //Enter Button Set up
+	       nameButtonEnter = new JButton(NAMEBUTTONSTRING);
+	       nameButtonEnter.addActionListener(this);
+	       c.fill = GridBagConstraints.HORIZONTAL;
+	       c.gridx = 0;
+	       c.gridy = 8;
+	       add(nameButtonEnter, c);
 	       
-	       add(nameButtonEnter);
-	       add(saveButton);
+	       //Name Display Label Set Up
+	       nameDisplayLabel = new JLabel(NAMEDISPLAYLABELSTRING);
+	       c.fill = GridBagConstraints.HORIZONTAL;
+	       c.gridx = 0;
+	       c.gridy = 10;
+	       nameDisplayLabel.setFont(new Font("Times", Font.ITALIC, 14));
+	       nameDisplayLabel.setBackground(Color.gray);
+	       nameDisplayLabel.setOpaque(true);
+	       add(nameDisplayLabel, c);
+	       
+	       //Race Display Label Set Up
+	       raceDisplayLabel = new JLabel(RACEDISPLAYLABELSTRING);
+	       c.fill = GridBagConstraints.HORIZONTAL;
+	       c.gridx = 0;
+	       c.gridy = 12;
+	       raceDisplayLabel.setFont(new Font("Times", Font.ITALIC, 14));
+	       raceDisplayLabel.setBackground(Color.gray);
+	       raceDisplayLabel.setOpaque(true);
+	       add(raceDisplayLabel, c);
+	   }
+	   
+	   @Override
+	   public void paintComponent(Graphics g)
+	   {
+		   super.paintComponent(g);
+		   g.drawImage(backgroundImage, 0, 0, this);
 	   }
 	   
 	   public String getName()
@@ -112,6 +163,15 @@ public class BasicInfoPanel extends JPanel implements ActionListener
 	   public Race getRace()
 	   {
 		   return aRace;
+	   }
+	   
+	   public void addNextButton(JButton nextButton)
+	   {
+			GridBagConstraints c = new GridBagConstraints();
+		    c.fill = GridBagConstraints.HORIZONTAL;
+		    c.gridx = 0;
+		    c.gridy = 14;
+		    this.add(nextButton, c);
 	   }
 	   
 	   public void actionPerformed(ActionEvent event)
@@ -137,46 +197,22 @@ public class BasicInfoPanel extends JPanel implements ActionListener
 		   else if(event.getSource() == nameButtonEnter && isHuman){
 			   aRace = Race.HUMAN;
 			   aName = nameTextField.getText();
-			   System.out.println(aName);
-			   System.out.println(aRace);
+			   nameDisplayLabel.setText(aName);
+			   raceDisplayLabel.setText(aRace.toString());
 		   }
 		   
 		   else if(event.getSource() == nameButtonEnter && isElf){
 			   aRace = Race.ELF;
 			   aName = nameTextField.getText();
-			   System.out.println(aName);
-			   System.out.println(aRace);
+			   nameDisplayLabel.setText(aName);
+			   raceDisplayLabel.setText(aRace.toString());
 		   }
 		   
 		   else if(event.getSource() == nameButtonEnter && isDwarf){
 			   aRace = Race.DWARF;
 			   aName = nameTextField.getText();
-			   System.out.println(aName);
-			   System.out.println(aRace);
-		   }
-		   
-		   else if(event.getSource() == saveButton && isHuman){
-			   aRace = Race.HUMAN;
-			   aName = nameTextField.getText();
-			   AttributeSet attributes = new AttributeSet(100, 100, 0, 0, 10, 10, 10, 10);
-			   main = new Character(aName, attributes, aRace);
-			   System.out.println(main.toString());
-		   }
-		   
-		   else if(event.getSource() == saveButton && isElf){
-			   aRace = Race.ELF;
-			   aName = nameTextField.getText();
-			   AttributeSet attributes = new AttributeSet(100, 100, 0, 0, 10, 10, 10, 10);
-			   main = new Character(aName, attributes, aRace);
-			   System.out.println(main.toString());
-		   }
-		   
-		   else if(event.getSource() == saveButton && isDwarf){
-			   aRace = Race.DWARF;
-			   aName = nameTextField.getText();
-			   AttributeSet attributes = new AttributeSet(100, 100, 0, 0, 10, 10, 10, 10);
-			   main = new Character(aName, attributes, aRace);
-			   System.out.println(main.toString());
+			   nameDisplayLabel.setText(aName);
+			   raceDisplayLabel.setText(aRace.toString());
 		   }
 	   }
 }

@@ -17,6 +17,14 @@ public class Character
 		inventory = new Inventory();
 	}
 	
+	public Character(String nm, AttributeSet attr, Race rc, Inventory inv)
+	{
+		name = nm;
+		attributes = attr;
+		race = rc;
+		inventory = inv;
+	}
+	
 	public Race getRace()
 	{
 		return this.race;
